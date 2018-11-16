@@ -9,7 +9,7 @@ elasticsearch:
     - cluster.name=search-cluster
     - node.name=node1
     - bootstrap.memory_lock=true
-    - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     - http.cors.enabled=true
     - http.cors.allow-origin=*
     - http.cors.allow-methods=*
@@ -25,13 +25,15 @@ elasticsearch:
     nofile: 
       soft: 65536
       hard: 65536
-  mem_limit: 3g
+  mem_limit: 4g
   volumes:
     - "/etc/timezone:/etc/timezone:ro"
     - "/etc/localtime:/etc/localtime:ro"
     - /home/elasticsearch/data1:/usr/share/elasticsearch/data
+    - ./elasticsearch/openkoreantext/sample-dictionary:/usr/share/elasticsearch/plugins/elasticsearch-analysis-openkoreantext/dic/sample-dictionary
   ports:
-    - 9200:9200
+    - "127.0.0.1:9200:9200"
+    - "192.168.0.213:9200:9200"
   expose:
     - "9300"
 
@@ -43,7 +45,7 @@ elasticsearch2:
     - cluster.name=search-cluster
     - node.name=node2
     - bootstrap.memory_lock=true
-    - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     - "discovery.zen.ping.unicast.hosts=elasticsearch"
     - xpack.security.enabled=false
     - xpack.monitoring.enabled=false
@@ -56,11 +58,12 @@ elasticsearch2:
     nofile: 
       soft: 65536
       hard: 65536
-  mem_limit: 3g
+  mem_limit: 4g
   volumes:
     - "/etc/timezone:/etc/timezone:ro"
     - "/etc/localtime:/etc/localtime:ro"
     - /home/elasticsearch/data2:/usr/share/elasticsearch/data
+    - ./elasticsearch/openkoreantext/sample-dictionary:/usr/share/elasticsearch/plugins/elasticsearch-analysis-openkoreantext/dic/sample-dictionary
   links:
     - elasticsearch
   expose:
@@ -74,7 +77,7 @@ elasticsearch3:
     - cluster.name=search-cluster
     - node.name=node3
     - bootstrap.memory_lock=true
-    - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     - "discovery.zen.ping.unicast.hosts=elasticsearch"
     - xpack.security.enabled=false
     - xpack.monitoring.enabled=false
@@ -87,11 +90,12 @@ elasticsearch3:
     nofile: 
       soft: 65536
       hard: 65536
-  mem_limit: 3g
+  mem_limit: 4g
   volumes:
     - "/etc/timezone:/etc/timezone:ro"
     - "/etc/localtime:/etc/localtime:ro"
     - /home/elasticsearch/data3:/usr/share/elasticsearch/data
+    - ./elasticsearch/openkoreantext/sample-dictionary:/usr/share/elasticsearch/plugins/elasticsearch-analysis-openkoreantext/dic/sample-dictionary
   links:
     - elasticsearch
   expose:
@@ -107,10 +111,12 @@ logstash:
   #  - ./logstash/pipeline:/usr/share/logstash/pipeline
   environment:
     - "TZ=Asia/Seoul" # offset +09:00 / DST +09:00
-    - "LS_JAVA_OPTS=-Xmx1g -Xms1g"
+    - "LS_JAVA_OPTS=-Xmx512m -Xms512m"
   ports:
-    - "5000:5000"
-    - "5001:5001/udp"
+    - "127.0.0.1:5000:5000"
+    - "127.0.0.1:5001:5001/udp"
+    - "192.168.0.213:5000:5000"
+    - "192.168.0.213:5001:5001/udp"
   links:
     - elasticsearch
 
@@ -130,7 +136,8 @@ kibana:
     - "/etc/localtime:/etc/localtime:ro"
   #  - ./kibana/config/:/usr/share/kibana/config
   ports:
-    - 5601:5601
+    - "127.0.0.1:5601:5601"
+    - "192.168.0.213:5601:5601"
   links:
     - elasticsearch
 

@@ -10,5 +10,7 @@ COPY elasticsearch-analysis-arirang-5.5.0.zip /opt/elasticsearch/
 #RUN elasticsearch-plugin install royrusso/elasticsearch-HQ
 RUN elasticsearch-plugin remove x-pack
 RUN elasticsearch-plugin install --verbose file:///opt/elasticsearch/elasticsearch-analysis-arirang-5.5.0.zip
+# https://github.com/open-korean-text/elasticsearch-analysis-openkoreantext
+RUN elasticsearch-plugin install https://github.com/open-korean-text/elasticsearch-analysis-openkoreantext/releases/download/5.5.0.2/elasticsearch-analysis-openkoreantext-5.5.0.2-plugin.zip
 RUN elasticsearch-plugin install https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip
 
